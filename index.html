@@ -1,0 +1,107 @@
+<html>
+  <head>
+    <style>
+      table {
+        border-collapse: collapse;
+        margin: auto;
+      }
+
+      td {
+        width: 100px;
+        height: 100px;
+        border: 1px solid black;
+        text-align: center;
+        font-size: 50px;
+      }
+
+      .x {
+        color: red;
+      }
+
+      .o {
+        color: blue;
+      }
+    </style>
+  </head>
+  <body>
+    <table id="board">
+      <tr>
+        <td id="cell_0"></td>
+        <td id="cell_1"></td>
+        <td id="cell_2"></td>
+      </tr>
+      <tr>
+        <td id="cell_3"></td>
+        <td id="cell_4"></td>
+        <td id="cell_5"></td>
+      </tr>
+      <tr>
+        <td id="cell_6"></td>
+        <td id="cell_7"></td>
+        <td id="cell_8"></td>
+      </tr>
+    </table>
+    <script>
+      let board = ["", "", "", "", "", "", "", "", ""];
+      let winCombos = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6],
+      ];
+      let turn = "O";
+      let gameOver = false;
+
+      for (let i = 0; i < 9; i++) {
+        let cell = document.getElementById("cell_" + i);
+        cell.addEventListener("click", function () {
+          if (cell.innerHTML == "" && !gameOver) {
+            board[i] = turn;
+            cell.innerHTML = turn;
+            cell.classList.add(turn.toLowerCase());
+
+            if (checkWin(turn)) {
+              alert(turn + " has won!");
+              gameOver = true;
+            } else {
+              if (checkTie()) {
+                alert("It's a tie!");
+                gameOver = true;
+              } else {
+                turn = turn == "X" ? "O" : "X";
+              }
+            }
+          }
+        });
+      }
+
+      function checkWin(player) {
+        for (let combo of winCombos) {
+          if (
+            board[combo[0]] == player &&
+            board[combo[1]] == player &&
+            board[combo[2]] == player
+          ) {
+            return true;
+          }
+        }
+
+        return false;
+      }
+
+      function checkTie() {
+        for (let cell of board) {
+          if (cell == "") {
+            return false;
+          }
+        }
+
+        return true;
+      }
+    </script>
+  </body>
+</html>
